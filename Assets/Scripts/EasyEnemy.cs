@@ -12,7 +12,7 @@ public class EasyEnemy : MonoBehaviour, IEnemy
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private UnityEvent destroy;
 
-    private void Start()
+    public void Start()
     {
         InvokeRepeating("Shoot", 2, fireRate);     
         

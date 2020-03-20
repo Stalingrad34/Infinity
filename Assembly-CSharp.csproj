@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\IEnemy.cs" />
     <Compile Include="Assets\Scripts\IPlayer.cs" />
     <Compile Include="Assets\Scripts\Joystick.cs" />
+    <Compile Include="Assets\Scripts\Mine.cs" />
     <Compile Include="Assets\Scripts\MoveObject.cs" />
     <Compile Include="Assets\Scripts\Spawner.cs" />
     <Compile Include="Assets\Scripts\Star.cs" />

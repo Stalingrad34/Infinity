@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private UnityEvent hit;
     [SerializeField] private int damage;  
 
-    void OnCollisionEnter2D(Collision2D target)
+    public void OnCollisionEnter2D(Collision2D target)
     {
 
         switch (target.gameObject.tag)

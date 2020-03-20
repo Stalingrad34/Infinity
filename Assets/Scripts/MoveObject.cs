@@ -11,9 +11,9 @@ public class MoveObject : MonoBehaviour
     [Space]
     [SerializeField] internal bool playerAttack;   
     [SerializeField] private float attackSpeed;
-    [SerializeField] private Transform target;
+    internal Transform target;
 
-    private void Start()
+    public void Start()
     {
         if (playerAttack)
         {
@@ -21,7 +21,7 @@ public class MoveObject : MonoBehaviour
         } 
     }
 
-    void FixedUpdate()
+    public void FixedUpdate()
     {
         if (playerAttack)  
             transform.position = Vector2.MoveTowards(transform.position, target.position, attackSpeed);

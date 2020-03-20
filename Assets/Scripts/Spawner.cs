@@ -8,7 +8,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Star[] stars;
     [SerializeField] private float timeStarSpawn;
 
-    void Start()
+    public void Start()
     {
         InvokeRepeating("SpawnStar", 0, timeStarSpawn);  
     }

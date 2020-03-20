@@ -13,14 +13,9 @@ public class BronzeShip : MonoBehaviour, IPlayer
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private UnityEvent destroy;
-    
+       
 
-    void Start()
-    {
-    }
-
- 
-    void Update()
+    public void Update()
     {
         Vector2 currentPosition = transform.position;
         currentPosition.x = Mathf.Clamp(transform.position.x, -7, 2);
@@ -52,6 +47,5 @@ public class BronzeShip : MonoBehaviour, IPlayer
             timeForShoot = 0;
         }
 
-        Debug.Log("Shoot");
     }
 }
