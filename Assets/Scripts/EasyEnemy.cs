@@ -6,22 +6,15 @@ using UnityEngine.Events;
 public class EasyEnemy : MonoBehaviour, IEnemy
 {
     [SerializeField] private int health;
+    [SerializeField] private float fireRate;
     [SerializeField] private int score;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private UnityEvent destroy;
-    [SerializeField] private Animation boomAnimation;
-    [SerializeField] private AudioSource boomSound;
-
 
     private void Start()
     {
-        InvokeRepeating("Shoot", 2, 3);        
-    }
-
-
-    private void Update()
-    {
+        InvokeRepeating("Shoot", 2, fireRate);     
         
     }
 
@@ -30,8 +23,8 @@ public class EasyEnemy : MonoBehaviour, IEnemy
         health -= damage*2;
         if (health <= 0)
         {
-            destroy.Invoke();                    
-            Destroy(gameObject, 2);
+            destroy.Invoke();          
+            Destroy(gameObject, 1);
         }
     }
 

@@ -2,16 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class MoveObject : MonoBehaviour
 {
     [Header("Move")]
     [SerializeField] public float speed;
     [SerializeField] private Vector2 direction;
-    [Header("Player Attack")]
-    [SerializeField] private bool playerAttack;   
+    [Space]
+    [SerializeField] internal bool playerAttack;   
     [SerializeField] private float attackSpeed;
-    [SerializeField] private Transform target;  
-    
+    [SerializeField] private Transform target;
+
+    private void Start()
+    {
+        if (playerAttack)
+        {
+            target = GameObject.FindWithTag("Player").transform;
+        } 
+    }
 
     void FixedUpdate()
     {

@@ -17,7 +17,6 @@ public class BronzeShip : MonoBehaviour, IPlayer
 
     void Start()
     {
-        
     }
 
  
@@ -52,5 +51,7 @@ public class BronzeShip : MonoBehaviour, IPlayer
             Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
             timeForShoot = 0;
         }
+
+        Debug.Log("Shoot");
     }
 }
