@@ -5,13 +5,18 @@ using UnityEngine;
 
 public class MoveObject : MonoBehaviour
 {
-    [Header("Move")]
+    [Tooltip("Speed")]
+    [Range(0.0f, 0.2f)]
     [SerializeField] public float speed;
     [SerializeField] private Vector2 direction;
+
     [Space]
-    [SerializeField] internal bool playerAttack;   
+    [SerializeField] internal bool playerAttack;
+    [Tooltip("Attack Speed")]
+    [Range(0.0f, 0.2f)]
     [SerializeField] private float attackSpeed;
-    internal Transform target;
+
+    [SerializeField] internal Transform target;
 
     public void Start()
     {
@@ -27,7 +32,7 @@ public class MoveObject : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, target.position, attackSpeed);
         else        
             transform.Translate(speed * direction.normalized);
-        if (transform.position.x < -11 || transform.position.x > 11)
+        if (transform.position.y > 5.5f || transform.position.y < -5.5f)
             Destroy(gameObject);
         
     }

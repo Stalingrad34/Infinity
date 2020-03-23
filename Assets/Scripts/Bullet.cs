@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private UnityEvent hit;
+    [Tooltip("Damage")]
+    [Range(0.0f, 100.0f)]
     [SerializeField] private int damage;  
 
     public void OnCollisionEnter2D(Collision2D target)
@@ -14,7 +16,7 @@ public class Bullet : MonoBehaviour
         switch (target.gameObject.tag)
         {
             case "Player": 
-                target.gameObject.GetComponent<IPlayer>().ApplyDamage(damage);
+                target.gameObject.GetComponent<PlayerShip>().ApplyDamage(damage);              
                 break;
             case "Enemy":
                 target.gameObject.GetComponent<IEnemy>().ApplyDamage(damage);

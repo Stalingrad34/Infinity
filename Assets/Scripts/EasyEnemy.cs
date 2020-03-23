@@ -5,16 +5,23 @@ using UnityEngine.Events;
 
 public class EasyEnemy : MonoBehaviour, IEnemy
 {
+    [Tooltip("Time between shoot")]
+    [Range(0.0f, 1.0f)]
+    [SerializeField] private float timeForShoot;
+
+    [Tooltip("Health")]
+    [Range(0, 1000)]
     [SerializeField] private int health;
-    [SerializeField] private float fireRate;
+
     [SerializeField] private int score;
+    [Space]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private UnityEvent destroy;
 
     public void Start()
     {
-        InvokeRepeating("Shoot", 2, fireRate);     
+        InvokeRepeating("Shoot", 2, timeForShoot);     
         
     }
 
@@ -29,7 +36,7 @@ public class EasyEnemy : MonoBehaviour, IEnemy
     }
 
     public void Shoot()
-    {
+    {        
         Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
     }
 

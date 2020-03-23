@@ -4,7 +4,6 @@ using UnityEngine;
 
    public interface IEnemy
 {
-
     void ApplyDamage(int damage);
     void Shoot();    
     
