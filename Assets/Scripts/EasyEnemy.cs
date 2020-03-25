@@ -27,17 +27,22 @@ public class EasyEnemy : MonoBehaviour, IEnemy
 
     public void ApplyDamage(int damage)
     {
-        health -= damage*2;
+        health -= damage;
         if (health <= 0)
         {
             destroy.Invoke();          
-            Destroy(gameObject, 1);
+            Destroy(gameObject, 1.4f);
         }
     }
 
     public void Shoot()
     {        
         Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+    }
+
+    public void Create(Vector2 enemyPosition)
+    {
+        Instantiate(this, enemyPosition, Quaternion.identity);             
     }
 
 }

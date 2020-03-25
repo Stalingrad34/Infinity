@@ -52,7 +52,7 @@ public class PlayerShip : MonoBehaviour
 
     public void ApplyDamage(int damage)
     {
-        health -= damage;
+        health -= damage;       
 
         if (Health <= 0)                   
             destroy.Invoke();           

@@ -13,9 +13,9 @@ public class Star : MonoBehaviour
     [SerializeField] private float maxSpeed;
 
 
-    public void Create(Star starNumber, Vector2 starPosition)
+    public void Create(Vector2 starPosition)
     {
-        Instantiate(starNumber, starPosition, Quaternion.identity);
+        Instantiate(this, starPosition, Quaternion.identity);
 
         GetComponent<SpriteRenderer>().color = colors[Random.Range(0, colors.Length)];
 

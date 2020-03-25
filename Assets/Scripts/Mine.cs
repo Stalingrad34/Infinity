@@ -20,12 +20,8 @@ public class Mine : MonoBehaviour, IEnemy
     public void FixedUpdate()
     {
         float distance = Vector2.Distance(transform.position, target.position);
-
         if (distance <= distanceToAttack)
-        {
-            GetComponent<MoveObject>().playerAttack = true;
-            GetComponent<MoveObject>().target = target;
-        }
+            Shoot();                        
     }
     public void ApplyDamage(int damage)
     {
@@ -39,7 +35,13 @@ public class Mine : MonoBehaviour, IEnemy
 
     public void Shoot()
     {
-        
+        GetComponent<MoveObject>().playerAttack = true;
+        GetComponent<MoveObject>().target = target;
+    }
+
+    public void Create(Vector2 enemyPosition)
+    {
+        Instantiate(this, enemyPosition, Quaternion.identity);
     }
 
 }

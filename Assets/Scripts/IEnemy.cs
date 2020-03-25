@@ -5,6 +5,7 @@ using UnityEngine;
    public interface IEnemy
 {
     void ApplyDamage(int damage);
-    void Shoot();    
+    void Shoot();
+    void Create(Vector2 enemyPosition);
     
 }
