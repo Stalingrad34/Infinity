@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour
     [Range(0.0f, 100.0f)]
     [SerializeField] private int damage;  
 
-    public void OnCollisionEnter2D(Collision2D target)
+    private void OnCollisionEnter2D(Collision2D target)
     {
 
         switch (target.gameObject.tag)
@@ -24,6 +24,6 @@ public class Bullet : MonoBehaviour
         }
         
             hit.Invoke();
-            Destroy(gameObject);	        
+            Destroy(gameObject,0.5f);	        
     }
 }

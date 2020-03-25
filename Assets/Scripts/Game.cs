@@ -27,10 +27,10 @@ public class Game : MonoBehaviour
     private float maxHP;
     private float time;
     
-    void Start()
+    private void Start()
     {
         StartCoroutine(CreateEnemy());
-        InvokeRepeating("SpawnStar", 0, timeSpawnStar);
+        InvokeRepeating("CreateStar", 0, timeSpawnStar);
         playerShip = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShip>();
         maxHP = playerShip.Health;       
     }
@@ -47,9 +47,13 @@ public class Game : MonoBehaviour
         }
 
         BarHP.fillAmount = (float)playerShip.Health / maxHP;
+
+        if (playerShip.Health <= 0)
+            Invoke("GameOver", 3);
+        
     }
 
-    public void CreateStar()
+    private void CreateStar()
     {
         spawner.SpawnStar();
     }
@@ -63,7 +67,7 @@ public class Game : MonoBehaviour
         }       
     }
 
-    public void CreateBonus(Vector2 spawnPositionBonus)
+    private void CreateBonus(Vector2 spawnPositionBonus)
     {
         var randomNumber = Random.Range(0, 100);
 
@@ -72,5 +76,9 @@ public class Game : MonoBehaviour
             spawner.SpawnBonus(spawnPositionBonus);
         }
     }
-    
+
+    private void GameOver()
+    {
+
+    }
 }

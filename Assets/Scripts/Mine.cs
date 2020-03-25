@@ -28,15 +28,19 @@ public class Mine : MonoBehaviour, IEnemy
         health -= damage;
         if (health <= 0)
         {
-            destroy.Invoke();
+            GetComponent<MoveObject>().playerAttack = false;
+            destroy.Invoke();           
             Destroy(gameObject, 1);
         }
     }
 
     public void Shoot()
     {
-        GetComponent<MoveObject>().playerAttack = true;
-        GetComponent<MoveObject>().target = target;
+        if (health > 0)
+        {
+            GetComponent<MoveObject>().playerAttack = true;
+            GetComponent<MoveObject>().target = target;
+        }
     }
 
     public void Create(Vector2 enemyPosition)

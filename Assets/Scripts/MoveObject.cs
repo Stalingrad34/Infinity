@@ -32,6 +32,7 @@ public class MoveObject : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, target.position, attackSpeed);
         else        
             transform.Translate(speed * direction.normalized);
+
         if (transform.position.y > 5.5f || transform.position.y < -5.5f)
             Destroy(gameObject);
         

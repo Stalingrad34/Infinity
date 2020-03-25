@@ -7,7 +7,10 @@ public class Spawner : MonoBehaviour
     [Header("Stars")]
     [SerializeField] public Star[] stars;
     [Space]
-    [SerializeField] public GameObject[] enemys;     
+    [SerializeField] public GameObject[] enemys; 
+    [Space]
+    [SerializeField] public GameObject[] bonus;
+
 
     public void SpawnStar()
     {
@@ -25,6 +28,7 @@ public class Spawner : MonoBehaviour
 
     public void SpawnBonus(Vector2 spawnPositionBonus)
     {
-
+        var bonusNumber = Random.Range(0, enemys.Length);
+        bonus[bonusNumber].GetComponent<IBonus>().Create(spawnPositionBonus);
     }
 }

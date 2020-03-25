@@ -63,4 +63,14 @@ public class PlayerShip : MonoBehaviour
             Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);                 
     }
 
+    public void OnCollisionEnter2D(Collision2D visitor)
+    {
+        switch (visitor.gameObject.tag)
+        {
+            case "Enemy":
+                ApplyDamage(20);
+                visitor.gameObject.GetComponent<IEnemy>().ApplyDamage(1000);
+                break;
+        }
+    }
 }
