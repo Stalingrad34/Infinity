@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
-{
-    [Header("Stars")]
-    [SerializeField] public Star[] stars;
+{    
+    [SerializeField] private Star[] stars;
     [Space]
-    [SerializeField] public GameObject[] enemys; 
+    [SerializeField] private Enemy[] enemys; 
     [Space]
-    [SerializeField] public GameObject[] bonus;
+    [SerializeField] private Bonus[] bonuses;
 
 
     public void SpawnStar()
@@ -23,12 +22,12 @@ public class Spawner : MonoBehaviour
     {
         var enemyNumber = Random.Range(0, enemys.Length);
         var spawnPosition = new Vector2(Random.Range(-2.3f, 2.3f), transform.position.y);
-        enemys[enemyNumber].GetComponent<IEnemy>().Create(spawnPosition);
+        Instantiate(enemys[enemyNumber], spawnPosition, Quaternion.identity);        
     }
 
     public void SpawnBonus(Vector2 spawnPositionBonus)
     {
-        var bonusNumber = Random.Range(0, enemys.Length);
-        bonus[bonusNumber].GetComponent<IBonus>().Create(spawnPositionBonus);
+        var bonusNumber = Random.Range(0, bonuses.Length);       
+        Instantiate(bonuses[bonusNumber], spawnPositionBonus, Quaternion.identity);
     }
 }

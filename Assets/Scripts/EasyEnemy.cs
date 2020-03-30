@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EasyEnemy : MonoBehaviour, IEnemy
+public class EasyEnemy : Enemy
 {
     [Tooltip("Time between shoot")]
     [Range(0.0f, 1.0f)]
@@ -12,6 +12,10 @@ public class EasyEnemy : MonoBehaviour, IEnemy
     [Tooltip("Health")]
     [Range(0, 1000)]
     [SerializeField] private int health;
+
+    [Tooltip("Bonus chance")]
+    [Range(0, 100)]
+    [SerializeField] private int bonusChance;
 
     [SerializeField] private int score;
     [Space]
@@ -25,24 +29,20 @@ public class EasyEnemy : MonoBehaviour, IEnemy
         
     }
 
-    public void ApplyDamage(int damage)
+    internal override void ApplyDamage(int damage)
     {
         health -= damage;
         if (health <= 0)
         {
-            destroy.Invoke();          
+            destroy.Invoke();           
+            FindObjectOfType<Game>().CreateBonus(transform.position, bonusChance);
             Destroy(gameObject, 1.4f);
         }
     }
 
-    public void Shoot()
+    internal override void Shoot()
     {        
         Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
     }
-
-    public void Create(Vector2 enemyPosition)
-    {
-        Instantiate(this, enemyPosition, Quaternion.identity);             
-    }
-
+ 
 }

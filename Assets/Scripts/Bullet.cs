@@ -19,7 +19,7 @@ public class Bullet : MonoBehaviour
                 target.gameObject.GetComponent<PlayerShip>().ApplyDamage(damage);              
                 break;
             case "Enemy":
-                target.gameObject.GetComponent<IEnemy>().ApplyDamage(damage);
+                target.gameObject.GetComponent<Enemy>().ApplyDamage(damage);
                 break;            
         }
         

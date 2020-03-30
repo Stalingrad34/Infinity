@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(EdgeCollider2D))]
+[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(Animator))]
 
 public class PlayerShip : MonoBehaviour
 {
@@ -25,9 +28,11 @@ public class PlayerShip : MonoBehaviour
     [SerializeField] private UnityEvent destroy;
     private Vector2 direction;
     private Rigidbody2D Rigidbody;
+    private int maxHP;
     
     public void Start()
     {
+        maxHP = health;
         Rigidbody = GetComponent<Rigidbody2D>();
         InvokeRepeating("Shoot", 0f, timeForShoot);    
     }
@@ -52,15 +57,22 @@ public class PlayerShip : MonoBehaviour
 
     public void ApplyDamage(int damage)
     {
-        health -= damage;       
+        health -= damage;
+        if (health <= 0)       
+            destroy.Invoke();            
+    }
 
-        if (Health <= 0)                   
-            destroy.Invoke();           
+    private void TakeBonusHP(int hp)
+    {
+        health += hp;
+        if (health > maxHP)       
+            health = maxHP;      
     }
 
     public void Shoot()
     {        
-            Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);                 
+        Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+        GetComponent<AudioSource>().Play();
     }
 
     public void OnCollisionEnter2D(Collision2D visitor)
@@ -69,8 +81,8 @@ public class PlayerShip : MonoBehaviour
         {
             case "Enemy":
                 ApplyDamage(20);
-                visitor.gameObject.GetComponent<IEnemy>().ApplyDamage(1000);
-                break;
+                visitor.gameObject.GetComponent<Enemy>().ApplyDamage(1000);
+                break;            
         }
     }
 }

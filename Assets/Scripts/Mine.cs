@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-public class Mine : MonoBehaviour, IEnemy
+public class Mine : Enemy
 {
     [SerializeField] private int health;    
     [SerializeField] private int score;
@@ -23,7 +23,7 @@ public class Mine : MonoBehaviour, IEnemy
         if (distance <= distanceToAttack)
             Shoot();                        
     }
-    public void ApplyDamage(int damage)
+    internal override void ApplyDamage(int damage)
     {
         health -= damage;
         if (health <= 0)
@@ -34,7 +34,7 @@ public class Mine : MonoBehaviour, IEnemy
         }
     }
 
-    public void Shoot()
+    internal override void Shoot()
     {
         if (health > 0)
         {
@@ -43,9 +43,8 @@ public class Mine : MonoBehaviour, IEnemy
         }
     }
 
-    public void Create(Vector2 enemyPosition)
+    public void CreateBonus()
     {
-        Instantiate(this, enemyPosition, Quaternion.identity);
+        throw new System.NotImplementedException();
     }
-
 }

@@ -17,22 +17,20 @@ public class Game : MonoBehaviour
     [Range(1.0f, 3.0f)]
     [SerializeField] private float increaserTimeSpawnEnemy;
 
-    [Tooltip("Bonus chance")]
-    [Range(0, 100)]
-    [SerializeField] private int bonusChance;
-
     [SerializeField] private Image BarHP;
-    [SerializeField] Spawner spawner;
-    public PlayerShip playerShip;
+    [SerializeField] private Spawner spawner;
+    [SerializeField] private PlayerShip playerShip;
     private float maxHP;
     private float time;
+    private IEnumerator createEnemy;
     
     private void Start()
     {
-        StartCoroutine(CreateEnemy());
-        InvokeRepeating("CreateStar", 0, timeSpawnStar);
+        createEnemy = CreateEnemy();
+        StartCoroutine(createEnemy);
+        InvokeRepeating("CreateStar", 0, timeSpawnStar);       
         playerShip = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShip>();
-        maxHP = playerShip.Health;       
+        maxHP = playerShip.Health;        
     }
 
     private void Update()
@@ -41,11 +39,12 @@ public class Game : MonoBehaviour
 
         if (time > 10 && timeSpawnEnemy > 0)
         {
+            StopCoroutine(createEnemy);
             time = 0;
             timeSpawnEnemy = timeSpawnEnemy / increaserTimeSpawnEnemy;
-            StartCoroutine(CreateEnemy());        
+            StartCoroutine(createEnemy);                  
         }
-
+       
         BarHP.fillAmount = (float)playerShip.Health / maxHP;
 
         if (playerShip.Health <= 0)
@@ -58,27 +57,26 @@ public class Game : MonoBehaviour
         spawner.SpawnStar();
     }
 
-    IEnumerator CreateEnemy()
+    private IEnumerator CreateEnemy()
     {
-        while (time < 10)
+        while (true)
         {
             yield return new WaitForSeconds(timeSpawnEnemy);
-            spawner.SpawnEnemy();
+            spawner.SpawnEnemy();          
         }       
     }
 
-    private void CreateBonus(Vector2 spawnPositionBonus)
+    public void CreateBonus(Vector2 positionBonus, int bonusChance)
     {
         var randomNumber = Random.Range(0, 100);
-
         if (randomNumber < bonusChance)
         {
-            spawner.SpawnBonus(spawnPositionBonus);
+            spawner.SpawnBonus(positionBonus);
         }
     }
 
-    private void GameOver()
+    public void GameOver()
     {
-
+        
     }
 }
