@@ -6,13 +6,10 @@ using UnityEngine.Events;
 
 public class Mine : Enemy
 {
-    [SerializeField] private int health;    
-    [SerializeField] private int score;
     [SerializeField] private float distanceToAttack;
-    [SerializeField] private UnityEvent destroy;
     private Transform target;
 
-    public void Start()
+    public override void Start()
     {
         target = GameObject.FindWithTag("Player").transform;
     }
@@ -45,6 +42,6 @@ public class Mine : Enemy
 
     public void CreateBonus()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

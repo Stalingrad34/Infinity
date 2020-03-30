@@ -29,15 +29,17 @@ public class PlayerShip : MonoBehaviour
     private Vector2 direction;
     private Rigidbody2D Rigidbody;
     private int maxHP;
+    private IEnumerator shootRate;
     
-    public void Start()
+    private void Start()
     {
         maxHP = health;
         Rigidbody = GetComponent<Rigidbody2D>();
-        InvokeRepeating("Shoot", 0f, timeForShoot);    
+        shootRate = Shoot();
+        StartCoroutine(shootRate);
     }
 
-    public void Update()
+    private void Update()
     {
         Vector2 currentPosition = transform.position;
         currentPosition.x = Mathf.Clamp(transform.position.x, -2.3f, 2.3f);
@@ -49,33 +51,44 @@ public class PlayerShip : MonoBehaviour
     {      
         Rigidbody.velocity = direction * speed;
     }
-
+    
     public void Move(Vector2 joystick)
     {      
             direction = joystick;            
-    }   
-
-    public void ApplyDamage(int damage)
-    {
-        health -= damage;
-        if (health <= 0)       
-            destroy.Invoke();            
     }
 
-    private void TakeBonusHP(int hp)
+    private IEnumerator Shoot()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(timeForShoot);
+            Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+            GetComponent<AudioSource>().Play();
+        }      
+    }
+
+    internal void ApplyDamage(int damage)
+    {
+        health -= damage;
+        Game.ChangeBarHP((float)health / (float)maxHP);
+
+        if (health <= 0)
+        {
+            destroy.Invoke();
+            Game.GameOver();
+        }
+        StopCoroutine(shootRate);
+    }
+
+    internal void TakeBonusHP(int hp)
     {
         health += hp;
         if (health > maxHP)       
-            health = maxHP;      
+            health = maxHP;
+        Game.ChangeBarHP((float)health / (float)maxHP);
     }
 
-    public void Shoot()
-    {        
-        Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
-        GetComponent<AudioSource>().Play();
-    }
-
-    public void OnCollisionEnter2D(Collision2D visitor)
+    private void OnCollisionEnter2D(Collision2D visitor)
     {
         switch (visitor.gameObject.tag)
         {

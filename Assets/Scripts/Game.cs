@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,20 +18,30 @@ public class Game : MonoBehaviour
     [Range(1.0f, 3.0f)]
     [SerializeField] private float increaserTimeSpawnEnemy;
 
-    [SerializeField] private Image BarHP;
+    [SerializeField] private Image barHP;
+    [SerializeField] private Text scoreUI;
+    [SerializeField] private Text coinsUI;
     [SerializeField] private Spawner spawner;
-    [SerializeField] private PlayerShip playerShip;
-    private float maxHP;
     private float time;
     private IEnumerator createEnemy;
-    
+    private static int bestScore;
+    internal static int score;
+    private static int goldCoins;
+    internal static Game currentGame; 
+
+    private void Awake()
+    {
+        if (currentGame == null)        
+            currentGame = this;          
+    }
+
     private void Start()
     {
+        goldCoins = PlayerPrefs.GetInt("GoldCoins", 0);
+        bestScore = PlayerPrefs.GetInt("BestScore", 0);       
         createEnemy = CreateEnemy();
         StartCoroutine(createEnemy);
-        InvokeRepeating("CreateStar", 0, timeSpawnStar);       
-        playerShip = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShip>();
-        maxHP = playerShip.Health;        
+        InvokeRepeating("CreateStar", 0, timeSpawnStar);           
     }
 
     private void Update()
@@ -44,17 +55,13 @@ public class Game : MonoBehaviour
             timeSpawnEnemy = timeSpawnEnemy / increaserTimeSpawnEnemy;
             StartCoroutine(createEnemy);                  
         }
-       
-        BarHP.fillAmount = (float)playerShip.Health / maxHP;
-
-        if (playerShip.Health <= 0)
-            Invoke("GameOver", 3);
-        
     }
 
     private void CreateStar()
     {
         spawner.SpawnStar();
+        if (currentGame.barHP.fillAmount > 0)
+            ChangeScore(1);
     }
 
     private IEnumerator CreateEnemy()
@@ -64,19 +71,36 @@ public class Game : MonoBehaviour
             yield return new WaitForSeconds(timeSpawnEnemy);
             spawner.SpawnEnemy();          
         }       
+        
     }
 
-    public void CreateBonus(Vector2 positionBonus, int bonusChance)
+    internal static void CreateBonus(Vector2 positionBonus, int bonusChance)
     {
-        var randomNumber = Random.Range(0, 100);
+        var randomNumber = UnityEngine.Random.Range(0, 100);
         if (randomNumber < bonusChance)
         {
-            spawner.SpawnBonus(positionBonus);
+            currentGame.spawner.SpawnBonus(positionBonus);           
         }
     }
 
-    public void GameOver()
+    internal static void ChangeBarHP(float hp) => currentGame.barHP.fillAmount = hp;
+ 
+    internal static void ChangeScore(int inputScore)
     {
+        score += inputScore;
+        currentGame.scoreUI.text = score.ToString();
+    }
+    internal static void ChangeGoldCoin(int coin)
+    {
+        goldCoins += coin;
+        currentGame.coinsUI.text = goldCoins.ToString();
+    }
+
+    internal static void GameOver()
+    {
+        if (score > bestScore)       
+            PlayerPrefs.SetInt("BestScore", score); 
         
+        PlayerPrefs.SetInt("GoldCoins", goldCoins);       
     }
 }
