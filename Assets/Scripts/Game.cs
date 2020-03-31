@@ -16,7 +16,7 @@ public class Game : MonoBehaviour
     [SerializeField] private float timeSpawnEnemy;
 
     [Tooltip("Increaser spawn time")]
-    [Range(1.0f, 3.0f)]
+    [Range(1.0f, 2.0f)]
     [SerializeField] private float increaserTimeSpawnEnemy;
 
     [SerializeField] private Image barHP;
@@ -25,8 +25,8 @@ public class Game : MonoBehaviour
     [SerializeField] private Spawner spawner;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private Transform spawnerPlayer;
-    [SerializeField] private PlayerShip[] ships;
-    public static float time;
+    internal static PlayerShip playerShip;
+    private float time;
     private IEnumerator createEnemy;
     private static int bestScore;
     internal static int score;
@@ -49,7 +49,7 @@ public class Game : MonoBehaviour
         StartCoroutine(createEnemy);
         InvokeRepeating("CreateStar", 0, timeSpawnStar);
 
-        Instantiate(ships[PlayerPrefs.GetInt("PlayerShip", 0)], spawnerPlayer.position, Quaternion.identity);
+        Instantiate(playerShip, spawnerPlayer.position, Quaternion.identity);
     }
 
     private void Update()

@@ -27,6 +27,7 @@ public class MainMenu : MonoBehaviour
         chooseShip.sprite = ships[shipNumber].GetComponent<SpriteRenderer>().sprite;
         bestScore.text = PlayerPrefs.GetInt("BestScore", 0).ToString();
         goldCoins.text = PlayerPrefs.GetInt("GoldCoins", 0).ToString();
+        CheckPurchase(ships[shipNumber]);
     }
 
     public void ChangeShipToLeft()
@@ -96,7 +97,7 @@ public class MainMenu : MonoBehaviour
     public void Buy()
     {
         var coins = PlayerPrefs.GetInt("GoldCoins", 0);
-        if (coins > ships[shipNumber].price)
+        if (possibleBuy)
         {
             ships[shipNumber].isPurchased = true;
             coins -= ships[shipNumber].price;
@@ -111,6 +112,7 @@ public class MainMenu : MonoBehaviour
         if (gameReady)
         {
             Game.score = 0;
+            Game.playerShip = ships[shipNumber];
             SceneManager.LoadScene("Game");
         }
 

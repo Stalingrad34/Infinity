@@ -28,8 +28,9 @@ public class PlayerShip : MonoBehaviour
     public int Health { get => health; }
     [Space]
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform bulletSpawn;
+    [SerializeField] private Transform[] bulletSpawn;
     [SerializeField] private GameObject shield;
+    [SerializeField] private AudioClip playerBoom;
     [SerializeField] internal bool isPurchased;
     [SerializeField] private UnityEvent destroy;  
     private bool shieldOn;
@@ -70,7 +71,8 @@ public class PlayerShip : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(timeForShoot);
-            Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+            foreach (var bullet in bulletSpawn)           
+                Instantiate(bulletPrefab, bullet.position, Quaternion.identity);            
             GetComponent<AudioSource>().Play();
         }      
     }
@@ -86,6 +88,8 @@ public class PlayerShip : MonoBehaviour
         if (health <= 0)
         {
             StopCoroutine(shootRate);
+            GetComponent<AudioSource>().clip = playerBoom;
+            GetComponent<AudioSource>().volume = 1f;
             destroy.Invoke();
             Invoke("PlayerDead", 3);
         }       
@@ -132,7 +136,11 @@ public class PlayerShip : MonoBehaviour
             case "Enemy":
                 ApplyDamage(20);
                 visitor.gameObject.GetComponent<Enemy>().ApplyDamage(1000);
-                break;            
+                break;
+            case "Asteroid":
+                if (!shieldOn)
+                   ApplyDamage(1000);
+                break;
         }
     }
 }

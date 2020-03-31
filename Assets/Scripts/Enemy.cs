@@ -22,7 +22,7 @@ using UnityEngine.Events;
     [SerializeField] internal int score;
     [Space]
     [SerializeField] internal GameObject bulletPrefab;
-    [SerializeField] internal Transform bulletSpawn;
+    [SerializeField] internal Transform[] bulletSpawn;
     [SerializeField] internal UnityEvent destroy;
 
     public virtual void Start()
@@ -44,6 +44,9 @@ using UnityEngine.Events;
 
     internal virtual void Shoot()
     {
-        Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+        foreach (var bullet in bulletSpawn)
+        {
+            Instantiate(bulletPrefab, bullet.position, Quaternion.identity);
+        }       
     }    
 }
