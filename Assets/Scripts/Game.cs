@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
@@ -22,12 +23,15 @@ public class Game : MonoBehaviour
     [SerializeField] private Text scoreUI;
     [SerializeField] private Text coinsUI;
     [SerializeField] private Spawner spawner;
-    private float time;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Transform spawnerPlayer;
+    [SerializeField] private PlayerShip[] ships;
+    public static float time;
     private IEnumerator createEnemy;
     private static int bestScore;
     internal static int score;
     private static int goldCoins;
-    internal static Game currentGame; 
+    internal static Game currentGame;
 
     private void Awake()
     {
@@ -38,10 +42,14 @@ public class Game : MonoBehaviour
     private void Start()
     {
         goldCoins = PlayerPrefs.GetInt("GoldCoins", 0);
-        bestScore = PlayerPrefs.GetInt("BestScore", 0);       
+        bestScore = PlayerPrefs.GetInt("BestScore", 0);
+        currentGame.coinsUI.text = goldCoins.ToString();
+
         createEnemy = CreateEnemy();
         StartCoroutine(createEnemy);
-        InvokeRepeating("CreateStar", 0, timeSpawnStar);           
+        InvokeRepeating("CreateStar", 0, timeSpawnStar);
+
+        Instantiate(ships[PlayerPrefs.GetInt("PlayerShip", 0)], spawnerPlayer.position, Quaternion.identity);
     }
 
     private void Update()
@@ -61,7 +69,7 @@ public class Game : MonoBehaviour
     {
         spawner.SpawnStar();
         if (currentGame.barHP.fillAmount > 0)
-            ChangeScore(1);
+            ChangeScore(1);          
     }
 
     private IEnumerator CreateEnemy()
@@ -70,8 +78,7 @@ public class Game : MonoBehaviour
         {
             yield return new WaitForSeconds(timeSpawnEnemy);
             spawner.SpawnEnemy();          
-        }       
-        
+        }            
     }
 
     internal static void CreateBonus(Vector2 positionBonus, int bonusChance)
@@ -98,9 +105,10 @@ public class Game : MonoBehaviour
 
     internal static void GameOver()
     {
-        if (score > bestScore)       
-            PlayerPrefs.SetInt("BestScore", score); 
-        
-        PlayerPrefs.SetInt("GoldCoins", goldCoins);       
+        if (score > bestScore)
+            PlayerPrefs.SetInt("BestScore", score);
+
+        PlayerPrefs.SetInt("GoldCoins", goldCoins);
+        currentGame.gameOverPanel.SetActive(true);
     }
 }

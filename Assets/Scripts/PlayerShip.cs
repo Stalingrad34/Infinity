@@ -21,15 +21,23 @@ public class PlayerShip : MonoBehaviour
     [Tooltip("Health")]
     [Range(0, 1000)]
     [SerializeField] private int health;
+
+    [Tooltip("Price")]
+    [Range(0, 1000)]
+    [SerializeField] internal int price;
     public int Health { get => health; }
     [Space]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
-    [SerializeField] private UnityEvent destroy;
+    [SerializeField] private GameObject shield;
+    [SerializeField] internal bool isPurchased;
+    [SerializeField] private UnityEvent destroy;  
+    private bool shieldOn;
     private Vector2 direction;
     private Rigidbody2D Rigidbody;
     private int maxHP;
     private IEnumerator shootRate;
+    private IEnumerator stopBonus;
     
     private void Start()
     {
@@ -44,7 +52,7 @@ public class PlayerShip : MonoBehaviour
         Vector2 currentPosition = transform.position;
         currentPosition.x = Mathf.Clamp(transform.position.x, -2.3f, 2.3f);
         currentPosition.y = Mathf.Clamp(transform.position.y, -4.5f, 4.5f);
-        transform.position = currentPosition;
+        transform.position = currentPosition;      
     }
 
     private void FixedUpdate()
@@ -69,15 +77,18 @@ public class PlayerShip : MonoBehaviour
 
     internal void ApplyDamage(int damage)
     {
-        health -= damage;
-        Game.ChangeBarHP((float)health / (float)maxHP);
-
+        if (!shieldOn)
+        {
+            health -= damage;
+            Game.ChangeBarHP((float)health / (float)maxHP);
+        }
+        
         if (health <= 0)
         {
+            StopCoroutine(shootRate);
             destroy.Invoke();
-            Game.GameOver();
-        }
-        StopCoroutine(shootRate);
+            Invoke("PlayerDead", 3);
+        }       
     }
 
     internal void TakeBonusHP(int hp)
@@ -85,8 +96,34 @@ public class PlayerShip : MonoBehaviour
         health += hp;
         if (health > maxHP)       
             health = maxHP;
-        Game.ChangeBarHP((float)health / (float)maxHP);
+        Game.ChangeBarHP((float)health / (float)maxHP);       
     }
+
+    internal void TakeBonusShield(int timeBonus)
+    {
+        if (!shieldOn)
+        {
+            shield.SetActive(true);
+            shieldOn = true;
+            stopBonus = StopBonusShield(timeBonus);
+            StartCoroutine(stopBonus);
+        }    
+    }
+
+    private IEnumerator StopBonusShield(int timeBonus)
+    {
+        yield return new WaitForSeconds(timeBonus);
+        shield.SetActive(false);
+        shieldOn = false;
+        stopBonus = null;
+    }
+
+    private void PlayerDead()
+    {
+        Game.GameOver();
+        Time.timeScale = 0.0001f;
+    }
+
 
     private void OnCollisionEnter2D(Collision2D visitor)
     {
