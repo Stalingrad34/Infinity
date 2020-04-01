@@ -9,6 +9,8 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Enemy[] enemys; 
     [Space]
     [SerializeField] private Bonus[] bonuses;
+    [Space]
+    [SerializeField] private GameObject[] asteroids;
 
 
     public void SpawnStar()
@@ -22,7 +24,14 @@ public class Spawner : MonoBehaviour
     {
         var enemyNumber = Random.Range(0, enemys.Length);
         var spawnPosition = new Vector2(Random.Range(-2.3f, 2.3f), transform.position.y);
-        Instantiate(enemys[enemyNumber], spawnPosition, Quaternion.identity);        
+        Instantiate(enemys[enemyNumber], spawnPosition, Quaternion.identity); 
+    }
+
+    public void SpawnAsteroid()
+    {
+        var asteroidNumber = Random.Range(0, asteroids.Length);
+        var spawnPosition = new Vector2(Random.Range(-2.3f, 2.3f), transform.position.y);
+        Instantiate(asteroids[asteroidNumber], spawnPosition, Quaternion.identity);
     }
 
     public void SpawnBonus(Vector2 spawnPositionBonus)

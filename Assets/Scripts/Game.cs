@@ -15,7 +15,11 @@ public class Game : MonoBehaviour
     [Range(0.0f, 5.0f)]
     [SerializeField] private float timeSpawnEnemy;
 
-    [Tooltip("Increaser spawn time")]
+    [Tooltip("Time spawn asteroid")]
+    [Range(0.0f, 10.0f)]
+    [SerializeField] private float timeSpawnAsteroid;
+
+    [Tooltip("Increaser time spawn")]
     [Range(1.0f, 2.0f)]
     [SerializeField] private float increaserTimeSpawnEnemy;
 
@@ -48,6 +52,7 @@ public class Game : MonoBehaviour
         createEnemy = CreateEnemy();
         StartCoroutine(createEnemy);
         InvokeRepeating("CreateStar", 0, timeSpawnStar);
+        InvokeRepeating("CreateAsteroid", 0, timeSpawnAsteroid);
 
         Instantiate(playerShip, spawnerPlayer.position, Quaternion.identity);
     }
@@ -65,11 +70,16 @@ public class Game : MonoBehaviour
         }
     }
 
-    private void CreateStar()
+    public void CreateStar()
     {
         spawner.SpawnStar();
         if (currentGame.barHP.fillAmount > 0)
             ChangeScore(1);          
+    }
+
+    public void CreateAsteroid()
+    {
+        spawner.SpawnAsteroid();
     }
 
     private IEnumerator CreateEnemy()

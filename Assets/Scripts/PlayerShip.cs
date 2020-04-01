@@ -34,16 +34,16 @@ public class PlayerShip : MonoBehaviour
     [SerializeField] internal bool isPurchased;
     [SerializeField] private UnityEvent destroy;  
     private bool shieldOn;
-    private Vector2 direction;
-    private Rigidbody2D Rigidbody;
+    private Vector3 startPosition;
+    private Vector3 endPosition;   
     private int maxHP;
     private IEnumerator shootRate;
     private IEnumerator stopBonus;
     
     private void Start()
     {
+        endPosition = transform.position;
         maxHP = health;
-        Rigidbody = GetComponent<Rigidbody2D>();
         shootRate = Shoot();
         StartCoroutine(shootRate);
     }
@@ -53,17 +53,28 @@ public class PlayerShip : MonoBehaviour
         Vector2 currentPosition = transform.position;
         currentPosition.x = Mathf.Clamp(transform.position.x, -2.3f, 2.3f);
         currentPosition.y = Mathf.Clamp(transform.position.y, -4.5f, 4.5f);
-        transform.position = currentPosition;      
-    }
+        transform.position = currentPosition;
 
-    private void FixedUpdate()
-    {      
-        Rigidbody.velocity = direction * speed;
-    }
-    
-    public void Move(Vector2 joystick)
-    {      
-            direction = joystick;            
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    startPosition = Camera.main.ScreenToWorldPoint(touch.position);
+                    break;
+
+                case TouchPhase.Moved:
+                    var direction = Camera.main.ScreenToWorldPoint(touch.position) - startPosition;
+                    transform.position = endPosition + direction;
+                    break;
+
+                case TouchPhase.Ended:
+                    endPosition = transform.position;
+                    break;                  
+            }
+        }
     }
 
     private IEnumerator Shoot()
